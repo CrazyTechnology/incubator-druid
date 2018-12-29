@@ -186,7 +186,9 @@ public class DirectDruidClient<T> implements QueryRunner<T>
       final long timeoutAt = query.getContextValue(QUERY_FAIL_TIME);
       final long maxScatterGatherBytes = QueryContexts.getMaxScatterGatherBytes(query);
       final AtomicLong totalBytesGathered = (AtomicLong) context.get(QUERY_TOTAL_BYTES_GATHERED);
+      //获取设置的maxQueuedBytes参数，用来限制
       final long maxQueuedBytes = QueryContexts.getMaxQueuedBytes(query, 0);
+      //是否开启背压机制，默认是禁用，默认值为0
       final boolean usingBackpressure = maxQueuedBytes > 0;
 
       final HttpResponseHandler<InputStream, InputStream> responseHandler = new HttpResponseHandler<InputStream, InputStream>()
