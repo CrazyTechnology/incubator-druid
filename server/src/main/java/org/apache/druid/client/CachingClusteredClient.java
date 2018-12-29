@@ -274,12 +274,15 @@ public class CachingClusteredClient implements QuerySegmentWalker
           return Sequences.empty();
         }
       }
-
+      //获取已经缓存的数据
       final List<Pair<Interval, byte[]>> alreadyCachedResults = pruneSegmentsWithCachedResults(queryCacheKey, segments);
+      //SortedMap中保存的是<server节点的信息，需要查询的segment的信息>
       final SortedMap<DruidServer, List<SegmentDescriptor>> segmentsByServer = groupSegmentsByServer(segments);
       return new LazySequence<>(() -> {
         List<Sequence<T>> sequencesByInterval = new ArrayList<>(alreadyCachedResults.size() + segmentsByServer.size());
+        //从缓存中获取数据
         addSequencesFromCache(sequencesByInterval, alreadyCachedResults);
+        //从节点中获取数据
         addSequencesFromServer(sequencesByInterval, segmentsByServer);
         return Sequences
             .simple(sequencesByInterval)
@@ -399,9 +402,12 @@ public class CachingClusteredClient implements QuerySegmentWalker
         final Set<ServerToSegment> segments
     )
     {
+      //queryCacheKey就是缓存中保存的数据key值，缓存的格式<key,value>
       if (queryCacheKey == null) {
+        //找不到就说明没有被缓存，返回空
         return Collections.emptyList();
       }
+      //声明一个list对象用来保存缓存的数据信息
       final List<Pair<Interval, byte[]>> alreadyCachedResults = Lists.newArrayList();
       Map<ServerToSegment, Cache.NamedKey> perSegmentCacheKeys = computePerSegmentCacheKeys(segments, queryCacheKey);
       // Pull cached segments from cache and remove from set of segments to query
@@ -539,6 +545,7 @@ public class CachingClusteredClient implements QuerySegmentWalker
     )
     {
       segmentsByServer.forEach((server, segmentsOfServer) -> {
+        //这里的serverrunner对象是DirectDruidClient的对象的实例，DirectDruidClient对其他节点发送查询请求
         final QueryRunner serverRunner = serverView.getQueryRunner(server);
 
         if (serverRunner == null) {
@@ -549,10 +556,12 @@ public class CachingClusteredClient implements QuerySegmentWalker
         final MultipleSpecificSegmentSpec segmentsOfServerSpec = new MultipleSpecificSegmentSpec(segmentsOfServer);
 
         // Divide user-provided maxQueuedBytes by the number of servers, and limit each server to that much.
+        //获取maxQueuedBytes参数，每个query能查询数据数据的最大值
         final long maxQueuedBytes = QueryContexts.getMaxQueuedBytes(query, httpClientConfig.getMaxQueuedBytes());
+        //计算出每个server节点的值，因为查询的时候会并行的发送到多个数据节点进行请求。
         final long maxQueuedBytesPerServer = maxQueuedBytes / segmentsByServer.size();
+        //查询结果封装成了Sequence对象
         final Sequence<T> serverResults;
-
         if (isBySegment) {
           serverResults = getBySegmentServerResults(serverRunner, segmentsOfServerSpec, maxQueuedBytesPerServer);
         } else if (!server.segmentReplicatable() || !populateCache) {
@@ -605,6 +614,7 @@ public class CachingClusteredClient implements QuerySegmentWalker
     )
     {
       @SuppressWarnings("unchecked")
+      //调用了DirectDruidClient的run方法
       final Sequence<Result<BySegmentResultValueClass<T>>> resultsBySegments = serverRunner.run(
           queryPlus
               .withQuery((Query<Result<BySegmentResultValueClass<T>>>) downstreamQuery)

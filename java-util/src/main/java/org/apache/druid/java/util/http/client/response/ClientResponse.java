@@ -22,10 +22,13 @@ package org.apache.druid.java.util.http.client.response;
 import javax.annotation.Nullable;
 
 /**
+ * ClientResponse对象用来表示各种状态的组合
  */
 public class ClientResponse<T>
 {
+  //是否结束通信
   private final boolean finished;
+  //继续读取数据
   private final boolean continueReading;
 
   @Nullable

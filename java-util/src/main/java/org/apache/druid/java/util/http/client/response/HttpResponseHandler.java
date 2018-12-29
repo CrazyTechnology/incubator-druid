@@ -24,7 +24,7 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
 
 /**
  * A handler for an HTTP request.
- *
+ * HTTP请求的处理程序。
  * The ClientResponse object passed around is used to store state between further chunks and indicate when it is safe
  * to hand the object back to the caller.
  *
@@ -50,7 +50,7 @@ public interface HttpResponseHandler<IntermediateType, FinalType>
 {
   /**
    * Handles the initial HttpResponse object that comes back from Netty.
-   *
+   * 处理从Netty返回的初始HttpResponse对象。
    * @param response   response from Netty
    * @param trafficCop flow controller, allows resuming suspended reads
    *
@@ -89,9 +89,9 @@ public interface HttpResponseHandler<IntermediateType, FinalType>
   {
     /**
      * Call this to resume reading after you have suspended it.
-     *
+     * 暂停之后调用此命令来恢复继续读取数据
      * @param chunkNum chunk number corresponding to the handleChunk() or handleResponse() call from which you
-     * @return time that backpressure was applied (channel was closed for reads)
+     * @return time that backpressure was applied (channel was closed for reads) 返回值是暂停读取的持续时间
      */
     long resume(long chunkNum);
   }

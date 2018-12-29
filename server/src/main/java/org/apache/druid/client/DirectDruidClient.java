@@ -153,6 +153,7 @@ public class DirectDruidClient<T> implements QueryRunner<T>
   @Override
   public Sequence<T> run(final QueryPlus<T> queryPlus, final Map<String, Object> context)
   {
+    //获取查询的具体类型
     final Query<T> query = queryPlus.getQuery();
     QueryToolChest<T, Query<T>> toolChest = warehouse.getToolChest(query);
     boolean isBySegment = QueryContexts.isBySegment(query);
@@ -191,10 +192,12 @@ public class DirectDruidClient<T> implements QueryRunner<T>
       //是否开启背压机制，默认是禁用，默认值为0
       final boolean usingBackpressure = maxQueuedBytes > 0;
 
+      //实现了一个
       final HttpResponseHandler<InputStream, InputStream> responseHandler = new HttpResponseHandler<InputStream, InputStream>()
       {
         private final AtomicLong totalByteCount = new AtomicLong(0);
         private final AtomicLong queuedByteCount = new AtomicLong(0);
+        //声明了channel的挂起时间
         private final AtomicLong channelSuspendedTime = new AtomicLong(0);
         private final BlockingQueue<InputStreamHolder> queue = new LinkedBlockingQueue<>();
         private final AtomicBoolean done = new AtomicBoolean(false);
