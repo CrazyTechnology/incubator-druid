@@ -192,7 +192,7 @@ public class DirectDruidClient<T> implements QueryRunner<T>
       //是否开启背压机制，默认是禁用，默认值为0
       final boolean usingBackpressure = maxQueuedBytes > 0;
 
-      //实现了一个
+      
       final HttpResponseHandler<InputStream, InputStream> responseHandler = new HttpResponseHandler<InputStream, InputStream>()
       {
         private final AtomicLong totalByteCount = new AtomicLong(0);
