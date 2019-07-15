@@ -62,6 +62,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * Stuff that may be needed by a Task in order to conduct its business.
+ * Task任务工具箱
  */
 public class TaskToolbox
 {

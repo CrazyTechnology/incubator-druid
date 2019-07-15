@@ -43,6 +43,7 @@ import java.util.List;
 
 /**
  * The CuratorCoordinator provides methods to use Curator. Persistent ZK paths are created on {@link #start()}.
+ * CuratorCoordinator 提供方法使用curator，在zookeeper上持久化节点
  */
 public class WorkerCuratorCoordinator
 {
@@ -92,7 +93,7 @@ public class WorkerCuratorCoordinator
       if (started) {
         return;
       }
-
+      log.info("WorkerCuratorCoordinator line 95 path:"+getTaskPathForWorker());
       CuratorUtils.createIfNotExists(
           curatorFramework,
           getTaskPathForWorker(),
@@ -100,7 +101,7 @@ public class WorkerCuratorCoordinator
           jsonMapper.writeValueAsBytes(ImmutableMap.of("created", DateTimes.nowUtc().toString())),
           config.getMaxZnodeBytes()
       );
-
+      log.info("WorkerCuratorCoordinator line 95 path:"+getStatusPathForWorker());
       CuratorUtils.createIfNotExists(
           curatorFramework,
           getStatusPathForWorker(),
@@ -181,7 +182,7 @@ public class WorkerCuratorCoordinator
       if (!started) {
         return;
       }
-
+      log.info("workcuratorcoordinator line 184 "+getStatusPathForId(announcement.getTaskStatus().getId()));
       CuratorUtils.createOrSet(
           curatorFramework,
           getStatusPathForId(announcement.getTaskStatus().getId()),

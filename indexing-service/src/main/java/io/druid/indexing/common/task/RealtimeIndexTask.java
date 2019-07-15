@@ -99,6 +99,7 @@ public class RealtimeIndexTask extends AbstractTask
     );
   }
 
+  //生成taskId
   static String makeTaskId(String dataSource, int partitionNumber, DateTime timestamp, int randomBits)
   {
     final StringBuilder suffix = new StringBuilder(8);
@@ -114,6 +115,7 @@ public class RealtimeIndexTask extends AbstractTask
     );
   }
 
+  //返回DataSource名字
   private static String makeDatasource(FireDepartment fireDepartment)
   {
     return fireDepartment.getDataSchema().getDataSource();

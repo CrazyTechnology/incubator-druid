@@ -77,9 +77,10 @@ import java.util.function.Function;
 /**
  * The DiscoveryModule allows for the registration of Keys of DruidNode objects, which it intends to be
  * automatically announced at the end of the lifecycle start.
- * 
+ * DiscoveryModule允许注册DruidNode对象的密钥，它打算在生命周期开始结束时自动宣布。
  * In order for this to work a ServiceAnnouncer instance *must* be injected and instantiated first.
  * This can often be achieved by registering ServiceAnnouncer.class with the LifecycleModule.
+ * 为了使其工作，必须首先注入和实例化ServiceAnnouncer实例*。这通常可以通过向LifecycleModule注册ServiceAnnouncer.class来实现。
  */
 public class DiscoveryModule implements Module
 {

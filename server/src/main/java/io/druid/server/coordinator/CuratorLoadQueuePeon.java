@@ -256,6 +256,7 @@ public class CuratorLoadQueuePeon extends LoadQueuePeon
       log.info("Server[%s] processing segment[%s]", basePath, currentlyProcessing.getSegmentIdentifier());
       final String path = ZKPaths.makePath(basePath, currentlyProcessing.getSegmentIdentifier());
       final byte[] payload = jsonMapper.writeValueAsBytes(currentlyProcessing.getChangeRequest());
+      log.info("line 259 ------------- CuratorLoadQueuePeon path:"+path);
       curator.create().withMode(CreateMode.EPHEMERAL).forPath(path, payload);
 
       processingExecutor.schedule(
@@ -301,6 +302,7 @@ public class CuratorLoadQueuePeon extends LoadQueuePeon
         //
         // We do not create the existence watcher first, because then it will fire when we create the
         // node and we'll have the same race when trying to refresh that watcher.
+        log.info("-----------line 305 curatorloadqueuePeon path: "+path);
         curator.create().withMode(CreateMode.EPHEMERAL).forPath(path, noopPayload);
 
         entryRemoved(path);

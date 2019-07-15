@@ -843,7 +843,7 @@ public class RemoteTaskRunner implements WorkerTaskRunner, TaskLogStreamer
         return false;
       }
       log.info("Coordinator asking Worker[%s] to add task[%s]", worker, task.getId());
-
+      log.info("RemoteTaskRunner line 846 path:"+indexerZkConfig.getTasksPath());
       CuratorUtils.createIfNotExists(
           cf,
           JOINER.join(indexerZkConfig.getTasksPath(), worker, task.getId()),

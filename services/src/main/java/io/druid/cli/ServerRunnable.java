@@ -95,6 +95,7 @@ public abstract class ServerRunnable extends GuiceRunnable
         builder.put(service.getName(), service);
       }
 
+      //声明一个node节点
       DiscoveryDruidNode discoveryDruidNode = new DiscoveryDruidNode(druidNode,
                                                                      nodeType,
                                                                      builder.build()
@@ -106,6 +107,7 @@ public abstract class ServerRunnable extends GuiceRunnable
             @Override
             public void start() throws Exception
             {
+              //创建节点，声明服务
               announcer.announce(discoveryDruidNode);
             }
 
